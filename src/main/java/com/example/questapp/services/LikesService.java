@@ -16,53 +16,50 @@ import com.example.questapp.requests.LikeCreateRequest;
 
 @Service
 public class LikesService {
-	
-	private LikeRepository likeRepository;
-	private UserService userService;
-	private PostService postService;
 
-	private LikesService(UserService userService, PostService postService, LikeRepository likeRepository) {
-		this.userService = userService;
-		this.postService = postService;
-		this.likeRepository = likeRepository;
-	}
+    private LikeRepository likeRepository;
+    private UserService userService;
+    private PostService postService;
 
-	public List<Like> getAllLikes(Optional<Long> user_id, Optional<Long> post_id) {
-		// TODO Auto-generated method stub
-		if(user_id.isPresent() && post_id.isPresent()) {
-			return likeRepository.findByPostIdAndUserId(user_id.get(),post_id.get());
-		}
-		else if(user_id.isPresent()) {
-			return likeRepository.findByUserId(user_id.get());
-		}
-		else if(post_id.isPresent()) {
-			return likeRepository.findByPostId(post_id.get());
-		}
-		else
-			return likeRepository.findAll();
-	}
+    private LikesService(UserService userService, PostService postService, LikeRepository likeRepository) {
+        this.userService = userService;
+        this.postService = postService;
+        this.likeRepository = likeRepository;
+    }
 
-	public Like getOneLike(Long likeID) {
-		// TODO Auto-generated method stub
-		return likeRepository.findById(likeID).orElse(null);
-	}
+    public List<Like> getAllLikes(Optional<Long> user_id, Optional<Long> post_id) {
+        // TODO Auto-generated method stub
+        if (user_id.isPresent() && post_id.isPresent()) {
+            return likeRepository.findByPostIdAndUserId(user_id.get(), post_id.get());
+        } else if (user_id.isPresent()) {
+            return likeRepository.findByUserId(user_id.get());
+        } else if (post_id.isPresent()) {
+            return likeRepository.findByPostId(post_id.get());
+        } else
+            return likeRepository.findAll();
+    }
 
-	public Like createOneLike(LikeCreateRequest lBody) {
-		// TODO Auto-generated method stub
-		User user = userService.getOneUserById(lBody.getUserID());
-		Post post = postService.getOnePostById(lBody.getPostID());
-		if(user == null || post == null)
-			return null;
-		else {
-			Like saveLike = new Like();
-			saveLike.setPost(post);
-			saveLike.setUser(user);
-			return likeRepository.save(saveLike);
-		}
-	}
+    public Like getOneLike(Long likeID) {
+        // TODO Auto-generated method stub
+        return likeRepository.findById(likeID).orElse(null);
+    }
+
+    public Like createOneLike(LikeCreateRequest lBody) {
+        // TODO Auto-generated method stub
+        User user = userService.getOneUserById(lBody.getUserID());
+        Post post = postService.getOnePostById(lBody.getPostID());
+        if (user == null || post == null)
+            return null;
+        else {
+            Like saveLike = new Like();
+            saveLike.setPost(post);
+            saveLike.setUser(user);
+            return likeRepository.save(saveLike);
+        }
+    }
 
 	/*public Like updateOneLike(Long likeID, Like lBody) {
-		
+
 		Optional<Like> like = likeRepository.findById(likeID);
 		if (like.isPresent()) {
 			Like foundLike = like.get();
@@ -73,13 +70,13 @@ public class LikesService {
 			return null;
 	}*/
 
-	public void deleteOneLike(Long likeID) {
-		
-		Optional<Like> like = likeRepository.findById(likeID);
-		if (like.isPresent())
-			likeRepository.deleteById(likeID);
-	
-	}
-	
-	
+    public void deleteOneLike(Long likeID) {
+
+        Optional<Like> like = likeRepository.findById(likeID);
+        if (like.isPresent())
+            likeRepository.deleteById(likeID);
+
+    }
+
+
 }
